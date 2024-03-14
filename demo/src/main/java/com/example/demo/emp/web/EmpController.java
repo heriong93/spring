@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Controller //컨테이너에 bean 등록 + 사용자 요청 처리할 수 있는 커맨드 핸들러 변환
 public class EmpController {
 	
- final EmpMapper mapper; //의존성 주입 (DI dependency injection)
+ final EmpMapper mapper = null;
  
 // @RequestMapping("/update")
 // @ResponseBody			//request.getParameter

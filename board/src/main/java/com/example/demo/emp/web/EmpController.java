@@ -37,17 +37,17 @@ public class EmpController {
 public void insert() {}
 
 //등록처리 --> photo employees테이블에 photo 컬럼 추가, insert하기
-
 @RequestMapping("/insert") //전체 방식 다 매핑해줌
 //@ResponseBody //결과는 페이지가 아니라 데이터 
 public String insert(@ModelAttribute("emp")EmpVO vo, MultipartFile photoFile) throws IllegalStateException, IOException {
-	vo.setPhoto(photoFile.getOriginalFilename()); 
-	System.out.println(vo);
-	 mapper.insertEmp(vo);
-	 File file=new File("d:/upload",photoFile.getOriginalFilename());
+	//파일 업로드
+	File file=new File("d:/upload",photoFile.getOriginalFilename());
 		//파일 저장
 	 photoFile.transferTo(file);
-		System.out.println("파일명:"+photoFile.getOriginalFilename());
+	 vo.setPhoto(photoFile.getOriginalFilename()); 
+		System.out.println(vo);
+		 mapper.insertEmp(vo);
+	 System.out.println("파일명:"+photoFile.getOriginalFilename());
 		System.out.println("파일크기:"+photoFile.getSize());
 	 return "redirect:/emp/list"; //페이지 명 result.html
 }
@@ -58,15 +58,30 @@ public void update() {
 	
 }
 //수정 처리
-@
+@PostMapping("/update")
+public String update(@ModelAttribute("emp") EmpVO vo) {
+	System.out.println(vo);
+	vo.setEmployeeId(218);
+	mapper.updateEmp(vo);
+	return "redirect:/emp/list";
+}	
 //삭제 처리
+//삭제처리
+	@GetMapping("/emp/delete/{employeeId}")
+	public String delete(@PathVariable int employeeId) {
+		System.out.println(employeeId);
+		
+		mapper.deleteEmp(employeeId);
+		return "redirect:/emp/list";
+	}	
 
 //상세 조회 페이지 이동
 @GetMapping("/emp/info/{employeeId}")
-public String emp(@PathVariable Integer employeeId) {
-	System.out.println("사번은:"+employeeId);
-	return "redirect:emp/list";
-	
+public String getEmpInfo(@PathVariable Integer employeeId) {
+	EmpVO emp = mapper.getEmpInfo(employeeId);
+	model.addAttribute("emp", emp);
+	System.out.println(emp);
+	return "/emp/info";
 }
 
 //목록 페이지로 이동
