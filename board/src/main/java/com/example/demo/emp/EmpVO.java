@@ -25,5 +25,6 @@ public class EmpVO {
 	String departmentId;
 	String managerId;
 	String phone; //emp-mapper에 alias로 이름 정해 적어줄 수도 있다
+	String photo;
 	
 }

@@ -16,13 +16,13 @@ import com.example.demo.emp.mapper.EmpMapper;
 public class EmpMapperTest {
 	@Autowired EmpMapper mapper;
 	
-	//@Test
+	@Test
 	public void 사원등록() {
 		//vo.객체 생성 (아래 내용 builder 로 사용 가능 )
 		EmpVO vo = EmpVO.builder()
 				//.employeeId(5000)
-				.lastName("Demetry")
-				.email("caprizo@naver.com")
+				.lastName("Gootry")
+				.email("caaado@naver.com")
 				.hireDate(new Date(1999,1,2))
 				.jobId("IT_PROG")
 				.build();
@@ -40,7 +40,7 @@ public class EmpMapperTest {
 		System.out.println("등록건수:"+result);
 	}
 	
-	@Test
+	//@Test
 	public void 사원전체조회() {
 		EmpVO vo = new EmpVO();
 		SearchVO svo = new SearchVO();
@@ -79,7 +79,7 @@ public class EmpMapperTest {
 		int result = mapper.deleteEmp(employeeId);
 		System.out.println("삭제된 사원은:"+result);
 	}
-	@Test
+	//@Test
 	public void 사원통계() { //listMap
 		List<Map<String, Object>> list = mapper.getStat();
 		//for departmentId cnt 만 출력 

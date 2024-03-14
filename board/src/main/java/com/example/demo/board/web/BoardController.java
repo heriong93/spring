@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.board.BoardVO;
 import com.example.demo.board.mapper.BoardMapper;
 
 
@@ -18,12 +19,12 @@ public class BoardController {
 @RequestMapping("/ajaxBoard")
 @ResponseBody
 public List<BoardVO> ajaxBoard(){
-	 return dao.getBoardList();
+	 return dao.getBoardList(null);
 }
 
 @RequestMapping("/boardList")
 public String boardList(Model model){
-	model.addAttribute("boardList", dao.getBoardList());
+	model.addAttribute("boardList", dao.getBoardList(null));
 return "boardList";
  } 
 }

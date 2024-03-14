@@ -2,57 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.emp.mapper.EmpMapper">
-<sql id="condition"> <!-- 자주 쓰이는 구문이 있을 때 sql로 만들고 불러올 수 있음 -->
-<where>
-<if test="vo.departmentId != null"> <!-- string일경우 null 로 체크 가능 int는 null 체크 안됨-->
-department_id =#{vo.departmentId}
-</if>
-<if test="vo.firstName != null">
-AND first_name = #{vo.firstName}
-</if>
-<if test="vo.managerId != null">
-AND manager_id = #{vo.managerId}
-</if>
-<if test="svo.employeeIds != null">
-AND employee_id
-<foreach collection="svo.employeeIds" 
-		 item="empId" 
-		 open="in(" 
-		 close=")" 
-		 separator="," > <!-- collection=for문 돌릴 배열 /open for문 돌기 전에 넣을 /for문 끝나고 close의 값으로 닫아줌. 동적 sql설명 여기 참조  https://mybatis.org/mybatis-3/ko/dynamic-sql.html -->
-#{empId}
-</foreach> 
-</if>
-ORDER BY first_name
+	<sql id="condition">
+		<where>
+ 			<if test="vo.departmentId != null">
+	 		 	DEPARTMENT_ID = #{departmentId} 			
+ 			</if>
+ 			<if test="vo.firstName != null">
+ 		   		AND FIRST_NAME = #{firstName} 			
+ 			</if>
+ 			<if test="vo.managerId != null">
+ 		   		AND MANAGER_ID = #{managerId} 			
+ 			</if>
+ 			<if test="svo.employeeIds != null">
+				AND employee_id 
+ 				<foreach collection="svo.employeeIds" open="in (" close=")" separator="," item="empid">				
+ 					#{empid}
+ 				</foreach>
+ 			</if>
+ 		   </where>
+	</sql>
+	<resultMap type="EmpVO" id="empResultMap">
+		<id property="employeeId" column="EMPLOYEE_ID"></id>
+		<result property="firstName" column="FIRST_NAME" />
+		<result property="phone" column="PHONE_NUMBER" />
 
-<![CDATA[
-) a where rownum <=#{svo.end} ) b where rn >= #{svo.start}
-]]>
-</where>
-</sql>
-<resultMap type="EmpVO" id="empResultMap">
-	<id property="employeeId" column="EMPLOYEE_ID" ></id>
-	<result property="firstName" column="FIRST_NAME" />
-	<result property="phone" column="PHONE_NUMBER" />
-</resultMap>
-<select id="getEmpList" resultMap="empResultMap">
-select *  from ( select rownum as rn, a.* from (
+	</resultMap>
 
-	SELECT     	EMPLOYEE_ID
+	<select id="getEmpList" resultMap="empResultMap">
+	select * from ( select rownum as rn, a.* from ( 
+	
+ 		SELECT EMPLOYEE_ID
 				,FIRST_NAME
 				,LAST_NAME
 				,EMAIL
-				,PHONE_NUMBER AS "phone"
+				,PHONE_NUMBER "phone"
 				,HIRE_DATE
 				,JOB_ID
 				,SALARY
 				,COMMISSION_PCT
 				,MANAGER_ID
 				,DEPARTMENT_ID
-	FROM employees e
-<include refid="condition"></include> <!-- 조건 위에 sql로 따로 빼줌 -->
-
-</select>
+ 		  FROM employees e
+		  <include refid="condition"></include> 			
+ 		 ORDER BY employee_id desc
+ 			
+ 	) a where rownum <![CDATA[<=]]> #{svo.end} ) b where rn >= #{svo.start}
+	</select>
 
 <select id="getEmpInfo" parameterType="int" resultType="EmpVO"> <!-- 단건조회 -->
 	select *
@@ -73,7 +68,8 @@ select *  from ( select rownum as rn, a.* from (
 			,JOB_ID
 			<if test="salary !=null">,SALARY</if>
 			,MANAGER_ID
-			,DEPARTMENT_ID)
+			,DEPARTMENT_ID
+			,PHOTO)
 	values
 		( 	
 		   #{employeeId}
@@ -85,6 +81,7 @@ select *  from ( select rownum as rn, a.* from (
 		   <if test="salary !=null">,#{salary}</if>
 		   ,#{managerId}
 		   ,#{departmentId}
+		   ,#{photo}
 		)
 </insert>
 
