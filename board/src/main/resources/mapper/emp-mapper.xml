@@ -99,4 +99,13 @@
 		group by e.department_id
 				,d.department_name
 </select>
+
+<update id="updateEmp" parameterType="EmpVO">
+	UPDATE employees
+	SET LAST_NAME= #{lastName},
+		HIRE_DATE= #{hireDate},
+		JOB_ID= #{jobId},
+		EMAIL= #{email}
+	WHERE employee_id = #{employeeId}
+</update>
 </mapper>

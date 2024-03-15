@@ -1,22 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorate="~{layout/layout}"> <!--  앞은 폴더명/ 뒤는 파일명 -->
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	.firstRow { color:lightblue;}
+	.oddRow {color:purple;}
+	.else {color: pink}
+	.backColor {background-color: lightgray;}
+</style>
 </head>
 <body>
+<div  layout:fragment="content">  <!--  layout.html에도 적용시켜줘야함 -->
+	사원 수<span th:text="${#lists.size(empList)}">10</span>명
+	회사 이름 <span th:utext="${companyName}"></span> <!-- unescape text- html을 인식해서 tag그 자체 나옴(empController.java) -->
 <table>
  <tr>
+ <th>No</th>
  <th>employee_id</th>
- <th>first_name</th>
- <th>last_name</th>
+ <th>Name</th>
+ <th>Name2</th>
+ <th>hire_date</th>
+ <th>salary</th>
+ <th>보너스</th>
+ <th>수정</th>
  </tr>
-<tr th:each="emp : ${empList}"> <!-- EmpController에서 넘겨주는 이름 -->
- <td th:text="${emp.employeeId}"></td>
- <td th:text="${emp.firstName}"></td>
- <td th:text="${emp.lastName}"></td>
- <td th:text="${emp.hireDate}"></td>
+<tr th:each="emp,stat : ${empList}" > <!-- EmpController에서 넘겨주는 이름 -->
+<td th:text="${stat.count}" class="backColor" th:classappend="${stat.first? 'firstRow':stat.odd? 'oddRow' : _ }">1</td>
+ <td th:text="${emp.employeeId}">100</td>
+ <td th:text="|${emp.firstName}  ${emp.lastName}|">길동</td>
+  <!-- /* <td th:text="${emp.firstName}+' ' + ${emp.lastName}|">길동</td> */ --> <!-- /* 소스 자체가 안보이게 주석 다는것 */ -->
+ <td>[[${emp.firstName}]] [[${emp.lastName}]]</td>
+ <td th:text="${#dates.format(emp.hireDate,'yyyy-MM-dd')}">2024-03-15</td>
+ <td th:text="${#numbers.formatCurrency(emp.salary)}">3000</td> <!-- /* https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#numbers 참조 */ -->
+ <td>
+ <button th:if="${emp.salary < 10000}">신청</button>
+ <button th:unless="${emp.salary < 10000}">미신청</button> <!-- if/else -->
+ </td>
+ <td> <!-- localhost:8091/update/100 -->
+ <a th:href="@{/update/{id}(id=${emp.employeeId})}">수정</a>
+ <!-- localhost:8091/delete?employeeId=100&name=xxx -->
+ <a th:href="@{/delete(employeeId=${emp.employeeId},name=${emp.firstName})}">삭제</a>
+ </td>
+ 
  </tr>
 </table>
+<div class="footerSector" th:replace="~{footer::addr}"> <!-- th:insert -> 해당 div 안에 넣기. replace-> 해당 대체 footer.html의미- 태그 이름으로 해당 내용만 불러올 수 있음 -->
+	여기에 삽입
+</div>
+<script th:inline="javascript"> 
+	let empList = [[${empList}]]
+	console.log(empList[0].firstName)
+</script>
+</div>
 </body>
 </html>

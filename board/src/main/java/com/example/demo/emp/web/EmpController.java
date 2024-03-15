@@ -37,7 +37,7 @@ public class EmpController {
 public void insert() {}
 
 //등록처리 --> photo employees테이블에 photo 컬럼 추가, insert하기
-@RequestMapping("/insert") //전체 방식 다 매핑해줌
+@RequestMapping("/emp/insert") //전체 방식 다 매핑해줌
 //@ResponseBody //결과는 페이지가 아니라 데이터 
 public String insert(@ModelAttribute("emp")EmpVO vo, MultipartFile photoFile) throws IllegalStateException, IOException {
 	//파일 업로드
@@ -58,10 +58,10 @@ public void update() {
 	
 }
 //수정 처리
-@PostMapping("/update")
-public String update(@ModelAttribute("emp") EmpVO vo) {
+@PostMapping("/emp/update")
+public String update(@ModelAttribute("emp") EmpVO vo) { //update.html 에 <form action="/emp/update" method="post">로 지정해줌
 	System.out.println(vo);
-	vo.setEmployeeId(218);
+	vo.setEmployeeId(221); //WHERE employee_id = #{employeeId}
 	mapper.updateEmp(vo);
 	return "redirect:/emp/list";
 }	
@@ -70,14 +70,13 @@ public String update(@ModelAttribute("emp") EmpVO vo) {
 	@GetMapping("/emp/delete/{employeeId}")
 	public String delete(@PathVariable int employeeId) {
 		System.out.println(employeeId);
-		
 		mapper.deleteEmp(employeeId);
 		return "redirect:/emp/list";
 	}	
 
 //상세 조회 페이지 이동
 @GetMapping("/emp/info/{employeeId}")
-public String getEmpInfo(@PathVariable Integer employeeId) {
+public String getEmpInfo(@PathVariable Integer employeeId, Model model) {
 	EmpVO emp = mapper.getEmpInfo(employeeId);
 	model.addAttribute("emp", emp);
 	System.out.println(emp);
