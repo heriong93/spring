@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Built-By: admin
+Build-Jdk: 11.0.20
+Class-Path: lib/jackson-databind-2.17.0.jar lib/jackson-annotations-2.17
+ .0.jar lib/jackson-core-2.17.0.jar lib/byte-buddy-1.14.9.jar
+Main-Class: com.example.test.HelloWorld
+Created-By: Maven Integration for Eclipse
+
