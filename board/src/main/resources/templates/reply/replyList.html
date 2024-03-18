@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>replyList</title>
+</head>
+<body>
+<h2>댓글 목록</h2>
+<table>
+ <tr>
+ <th>rno</th>
+ <th>rno</th>
+ <th>reply</th>
+ <th>replier</th>
+ </tr>
+<tr th:each="reply : ${replyList}"> <!-- EmpController에서 넘겨주는 이름 -->
+ <td th:text="${reply.rno}"></td>
+ <td th:text="${reply.bno}"></td>
+ <td th:text="${reply.reply}"></td>
+ <td th:text="${reply.replyer}"></td>
+ </tr>
+</table>
+</body>
+</html>

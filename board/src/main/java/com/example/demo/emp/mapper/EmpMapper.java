@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import com.example.demo.emp.EmpVO;
 import com.example.demo.emp.SearchVO;
@@ -16,4 +17,7 @@ public interface EmpMapper {
 	int deleteEmp (Integer employeeId); //단건 삭제
 	List<Map<String, Object>> getStat(); // 부서별 사원 조회 #{}매개변수 없으면 안에 (값)없어도 됨 
 	int updateEmp(EmpVO empVO);
+	
+	//@Select("select count(*) from employees") 이렇게 불러올 수도 있음
+	public long getCount();
 }

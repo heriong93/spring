@@ -15,4 +15,8 @@ public interface EmpMapper {
 	int insertEmp(EmpVO empVO); //단건 등록 
 	int deleteEmp (Integer employeeId); //단건 삭제
 	List<Map<String, Object>> getStat(); // 부서별 사원 조회 #{}매개변수 없으면 안에 (값)없어도 됨 
+int updateEmp(EmpVO empVO);
+	
+	//@Select("select count(*) from employees") 이렇게 불러올 수도 있음
+	public long getCount(EmpVO vo, SearchVO svo);
 }

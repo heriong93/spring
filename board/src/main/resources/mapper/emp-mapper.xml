@@ -27,6 +27,11 @@
 		<result property="phone" column="PHONE_NUMBER" />
 
 	</resultMap>
+	
+	<select id="getCount" resultType="long">
+		select count(*)
+		from employees
+	</select>
 
 	<select id="getEmpList" resultMap="empResultMap">
 	select * from ( select rownum as rn, a.* from ( 

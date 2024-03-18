@@ -4,13 +4,13 @@
 <mapper namespace="com.example.demo.emp.mapper.EmpMapper">
 <sql id="condition"> <!-- 자주 쓰이는 구문이 있을 때 sql로 만들고 불러올 수 있음 -->
 <where>
-<if test="vo.departmentId != null"> <!-- string일경우 null 로 체크 가능 int는 null 체크 안됨-->
+<if test="vo.departmentId != null and vo.departmentId != ''"> <!-- string일경우 null 로 체크 가능 int는 null 체크 안됨-->
 department_id =#{vo.departmentId}
 </if>
-<if test="vo.firstName != null">
-AND first_name = #{vo.firstName}
+<if test="vo.firstName != null  and vo.firstName != ''">
+AND first_name like '%' || #{vo.firstName} || '%'
 </if>
-<if test="vo.managerId != null">
+<if test="vo.managerId != null and vo.managerId != ''">
 AND manager_id = #{vo.managerId}
 </if>
 <if test="svo.employeeIds != null">
@@ -24,17 +24,19 @@ AND employee_id
 </foreach> 
 </if>
 </where>
-ORDER BY first_name
-
-<![CDATA[
-) a where rownum <=#{svo.end} ) b where rn >= #{svo.start}
-]]>
 </sql>
 <resultMap type="EmpVO" id="empResultMap">
 	<id property="employeeId" column="EMPLOYEE_ID" ></id>
 	<result property="firstName" column="FIRST_NAME" />
 	<result property="phone" column="PHONE_NUMBER" />
 </resultMap>
+
+<select id="getCount" resultType="long">
+		select count(*)
+		from employees
+		<include refid="condition"></include> <!-- 조건 위에 sql로 따로 빼줌 -->
+	</select>
+	
 <select id="getEmpList" resultMap="empResultMap">
 select *  from ( select rownum as rn, a.* from (
 
@@ -51,7 +53,11 @@ select *  from ( select rownum as rn, a.* from (
 				,DEPARTMENT_ID
 	FROM employees e
 <include refid="condition"></include> <!-- 조건 위에 sql로 따로 빼줌 -->
+ORDER BY first_name
 
+<![CDATA[
+) a where rownum <=#{svo.end} ) b where rn >= #{svo.start}
+]]>
 </select>
 
 <select id="getEmpInfo" parameterType="int" resultType="EmpVO"> <!-- 단건조회 -->

@@ -16,6 +16,30 @@
 <div  layout:fragment="content">  <!--  layout.html에도 적용시켜줘야함 -->
 	사원 수<span th:text="${#lists.size(empList)}">10</span>명
 	회사 이름 <span th:utext="${companyName}"></span> <!-- unescape text- html을 인식해서 tag그 자체 나옴(empController.java) -->
+	
+	<!-- 검색폼 시작 -->
+	<form name = "frmSearch" th:object="${empVO}" action="empList"> <!-- th:object="${empVO}" 지정해주면 사용할 때 *{firstName}처럼 empVO.firstName 이렇게 전체 안써줘도 됨  -->
+	<input type="hidden" name="page">
+	<select name="departmentId">
+	<option value="">선택
+		<option value="10" th:selected="${departmentId}=='10'">Administration
+		<option value="20" th:selected="${departmentId}=='20'">	Marketing
+		<option value="30" th:selected="${departmentId}=='30'">	Purchasing
+		<option value="40" th:selected="${departmentId}=='40'">	Human Resources
+		<option value="50" th:selected="${departmentId}=='50'">	Shipping
+		<option value="60" th:selected="${departmentId}=='60'">	IT
+		<option value="70" th:selected="${departmentId}=='70'">	Public Relations
+		<option value="80" th:selected="${departmentId}=='80'">	Sales
+		<option value="90" th:selected="${departmentId}=='90'">	Executive
+		<option value="100" th:selected="${departmentId}=='100'"> Finance
+		<option value="110" th:selected="${departmentId}=='110'"> Accounting
+</select>
+FirstName<input name="firstName" th:value="*{firstName}">
+ManagerID<input name="managerId" th:value="*{managerId}">
+<button type= "button" onclick="gopage(1)">검색</button>
+<button type= "button" onclick="init()">초기화</button>
+	</form>
+	<!--  검색 폼 끝  -->
 <table>
  <tr>
  <th>No</th>
@@ -40,19 +64,53 @@
  <button th:unless="${emp.salary < 10000}">미신청</button> <!-- if/else -->
  </td>
  <td> <!-- localhost:8091/update/100 -->
- <a th:href="@{/update/{id}(id=${emp.employeeId})}">수정</a>
+<!--  <a th:href="@{/update/{id}(id=${emp.employeeId})}">수정</a>  -->
+<button type="button" th:onclick="move([[${emp.employeeId}]])">조회</button>
  <!-- localhost:8091/delete?employeeId=100&name=xxx -->
  <a th:href="@{/delete(employeeId=${emp.employeeId},name=${emp.firstName})}">삭제</a>
  </td>
  
  </tr>
 </table>
+<!-- 페이징 시작 -->
+	<nav aria-label="...">
+	  <ul class="pagination">
+	    <li class="page-item" th:if="${paging.startPage} > 1 ">
+	        <a class="page-link" th:href="|javascript:gopage(${paging.startPage-1})|">Previous</a></li>
+
+	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" 
+	        class="page-item" 
+	        th:addclass="${num} == ${paging.page} ? active">
+	        <a class="page-link" th:href="|javascript:gopage(${num})|"  th:text="${num}">2</a></li>
+	    
+	    <li class="page-item" th:classappend="${paging.endPage} <= ${paging.lastPage} ? disabled">
+	        <a class="page-link" th:href="|javascript:gopage(${paging.endPage+1})|">Next</a></li>
+	  </ul>
+	</nav>
+	<!-- 페이징 종료 -->
 <div class="footerSector" th:replace="~{footer::addr}"> <!-- th:insert -> 해당 div 안에 넣기. replace-> 해당 대체 footer.html의미- 태그 이름으로 해당 내용만 불러올 수 있음 -->
 	여기에 삽입
 </div>
+[[${paging.endPage}]]
 <script th:inline="javascript"> 
 	let empList = [[${empList}]]
-	console.log(empList[0].firstName)
+	//console.log(empList[0].firstName)
+	
+	function gopage(p){
+		frmSearch.page.value = p;
+		frmSearch.submit();		
+		//location.href= 'empList?page='+ p
+	}
+	function init(){
+		frmSearch.departmentId.value = ""
+		frmSearch.firstName.value = ""
+		frmSearch.managerId.value = ""
+		//this.gopage(1);
+	}
+	function move(empId){
+		frmSearch.action = '/info/'+empId
+		frmSearch.submit();
+	}
 </script>
 </div>
 </body>
