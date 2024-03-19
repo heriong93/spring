@@ -1,6 +1,7 @@
 package com.example.demo.emp.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,14 @@ import com.example.demo.common.Paging;
 import com.example.demo.emp.EmpVO;
 import com.example.demo.emp.SearchVO;
 import com.example.demo.emp.mapper.EmpMapper;
+import com.example.demo.emp.service.EmpService;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor //생성자 방식
 @Controller //컨테이너에 bean 등록 + 사용자 요청 처리할 수 있는 커맨드 핸들러 변환
 public class EmpController {
 	
- final EmpMapper mapper;
+ final EmpService empService;
  
 // @RequestMapping("/update")
 // @ResponseBody			//request.getParameter
@@ -37,12 +39,7 @@ public class EmpController {
 //	 return "true";
 // }
 // 
- //아래 INSERT2와 넘어가는 것은 같음. 
- @RequestMapping("/ajaxEmp") //
- @ResponseBody
- public List<EmpVO> ajaxEmp(){
-	 return mapper.getEmpList(null,null);
- }
+
  
  @RequestMapping("/empResult")
  public String result() {
@@ -84,7 +81,7 @@ public class EmpController {
  
  @GetMapping("/info/{empId}") //<!-- localhost:8091/update/100 -->
  public String info(@PathVariable int empId, Model model) {
-	 model.addAttribute("emp", mapper.getEmpInfo(empId));
+	 model.addAttribute("emp", empService.getEmpInfo(empId));
 	 return "empInfo";
  }
  
@@ -97,6 +94,7 @@ public class EmpController {
  
  @GetMapping("/delete") // <!-- localhost:8091/delete?employeeId=100&name=xxx -->
  public String delete(int employeeId, String name) {
+	 empService.deleteEmp(employeeId);
 	 System.out.println(employeeId + name);
 	 return "index"; 
  }
@@ -108,12 +106,14 @@ public String empList(Model model, EmpVO vo, SearchVO svo, Paging pvo){
 	pvo.setPageSize(3); //페이지 번호 
 	svo.setStart(pvo.getFirst());
 	svo.setEnd(pvo.getLast());
-	pvo.setTotalRecord(mapper.getCount(vo,svo));
+	
+	Map<String,Object> map = empService.getEmpList(vo,svo);
+	
+	pvo.setTotalRecord((Long)map.get("count"));
 	model.addAttribute("paging",pvo);
 	
-	model.addAttribute("companyName", "<i><font color='red'>예담주식회사</font></i>");
-	//목록조회
-	model.addAttribute("empList", mapper.getEmpList(vo,svo));
+	//목록조회	
+	model.addAttribute("empList", map.get("data"));
 return "empList";
   } 
 }
