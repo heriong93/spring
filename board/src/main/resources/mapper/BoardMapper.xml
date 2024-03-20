@@ -14,11 +14,6 @@ AND content = #{content}
 <if test="writer != null">
 AND writer = #{writer}
 </if>
-ORDER BY board_name
-
-<![CDATA[
-) a where rownum <=#{end} ) b where rn >= #{start}
-]]>
 </where>
 </sql>
 
@@ -27,6 +22,11 @@ ORDER BY board_name
 <result property="content" column="content"/>
 <result property="writer" column="writer" />
 </resultMap>
+
+<select id="getCount" resultType="long">
+		select count(*)
+		from board
+	</select>
 
 <!-- 게시글 전체 검색, 페이징 -->
 <select id="getBoardList" resultType="BoardVO">
@@ -40,6 +40,11 @@ select *  from ( select rownum as rn, a.* from (
 			,IMAGE 
 	from board  
 	<include refid="condition"></include>
+	ORDER BY board_name
+
+<![CDATA[
+) a where rownum <=#{end} ) b where rn >= #{start}
+]]>
 </select>
 
 <!-- 단건 조회 -->

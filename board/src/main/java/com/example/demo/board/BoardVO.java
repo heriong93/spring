@@ -19,6 +19,8 @@ public class BoardVO {
 	Date writerDate;
 	int ClickCnt;
 	String image;
-	int start =1; //페이징용
-	int end = 10;
+	
+	long start = 1;
+	long end = 10;
+
 }
