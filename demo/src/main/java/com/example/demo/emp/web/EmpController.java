@@ -59,19 +59,24 @@ public class EmpController {
  public ResponseEntity<EmpVO> insert2(EmpVO vo) { //response body와 같음
 	 return new ResponseEntity<>(vo,HttpStatus.OK);
  }
+ //페이지 이동
+ @GetMapping("/insert")
+ public void insert() {}
+ 
+ //insert 처리
  @PostMapping("/insert") //post방식으로만 
  //@RequestMapping("/insert") //전체 방식 다 매핑해줌
  //@ResponseBody //결과는 페이지가 아니라 데이터 
  public ModelAndView insert(@ModelAttribute("emp")EmpVO vo) {
 	 System.out.println(vo);
-	 //mapper.insertEmp(vo);
+	 empService.insertEmp(vo);
 	 //커멘드 객체는 MODEL에 추가되고 
 	 //model.addAttribute ("EmpVO", vo);
 //model.addAttribute("insertResult","success"); //모델 넣어준 키 -벨류
 	 ModelAndView mv = new ModelAndView();
-	 mv.setViewName("result"); //페이지명
+	 mv.setViewName("/home"); //페이지명
 	 mv.addObject("insertResult", "success");
-	 mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+	 //mv.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 	 return mv; //페이지 명 result.html
  }
  @GetMapping("/")

@@ -1,3 +1,4 @@
+package com.example.demo.board;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.board.mapper.ReplyMapper;
