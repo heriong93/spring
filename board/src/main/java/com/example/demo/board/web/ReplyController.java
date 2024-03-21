@@ -1,4 +1,4 @@
-package com.example.demo.emp.web;
+package com.example.demo.board.web;
 
 import java.util.List;
 
@@ -24,9 +24,11 @@ import lombok.extern.log4j.Log4j;
 public class ReplyController {
 	@Autowired ReplyMapper mapper;
 	//댓글 리스트 
-	@GetMapping("/replies/list")
-	public List<ReplyVO> replyList (ReplyVO vo) {
-		return mapper.getReplyList(vo);
+	@GetMapping("/replyList")
+	public String replyList (Model model,ReplyVO vo) {
+		List<ReplyVO> replyList = mapper.getReplyList(vo);
+		model.addAttribute("replyList",replyList);
+		return "replyList";
 	}
 	
 	//댓글 등록

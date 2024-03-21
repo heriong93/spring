@@ -13,7 +13,7 @@
  <th>reply</th>
  <th>replier</th>
  </tr>
-<tr th:each="reply : ${replyList}"> <!-- EmpController에서 넘겨주는 이름 -->
+<tr th:each="reply : ${replyList}"> <!-- ReplyController에서 넘겨주는 이름 -->
  <td th:text="${reply.rno}"></td>
  <td th:text="${reply.bno}"></td>
  <td th:text="${reply.reply}"></td>
