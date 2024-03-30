@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dbal.app.shop.mapper.ProductMapper"> <!-- mapper.java위치 알려줘야함 -->
+
+<select id="getProductNo" resultType="int">
+	select max(product_id) +1
+	FROM PRODUCT_TBL_10
+</select>
+
+<!-- 전체 상품 조회  -->
+<select id="getProductList" resultType="ProductVO">   <!-- 담아야하는 값이 여러개여서 bookvo -->  
+	SELECT  PRODUCT_ID,
+			PRODUCT_NAME,
+			PRODUCT_PRICE,
+			PRODUCT_INFO,
+			PRODUCT_DATE,
+			COMPANY,
+			CASE 
+			WHEN MANAGER_ID = 'E201' THEN '김사원'
+									 ELSE '이대리'
+			END AS   MANAGER_ID
+	
+	FROM  PRODUCT_TBL_10
+	ORDER BY 1
+</select>
+
+<!-- 등록 -->
+<insert id="insertProduct" parameterType="ProductVO">
+	INSERT INTO PRODUCT_TBL_10  (
+						 PRODUCT_ID,
+						PRODUCT_NAME,
+						PRODUCT_PRICE,
+						PRODUCT_INFO,
+						PRODUCT_DATE,
+						COMPANY,
+						MANAGER_ID
+						)
+	
+						VALUES (
+						#{productId},
+						#{productName},
+						#{productPrice},
+						#{productInfo},
+						#{productDate},
+						#{company},
+						#{managerId}
+						)
+</insert>
+
+</mapper>

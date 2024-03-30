@@ -5,18 +5,27 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>커맨트객체</h2>
-	<form action="/insert" method="post">
-	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-		lastName<input name="lastName">
-		hireDate<input name="hireDate">
-		jobId<select name="jobId" >
-			<option value="IT_PROG">Programmer</option>
-			<option value="ST_MAN">Stock Manager</option>
-		</select>
-		이메일<input name="email">
-		<button>등록</button>
-	</form>
+	<h3>도서 등록</h3>
+	<table>
+	<tbody>
+		 <tr>
+			 <th>도서번호</th>
+			 <input type="text" value="${book.bookNo}"></td>
+			 <th>도서명</th>
+			  <input type="text" value="${book.bookName}"></td>
+			 <th>도서표지</th>
+			 <input type="text" value="${book.bookCoverimg}"></td>
+			 <th>출판일자</th>
+			  <input type="date" value="${book.bookDate}"></td>
+			 <th>금액</th>
+			  <input type="number" value="${book.bookPrice}"></td>
+			 <th>출판사</th>
+			  <input type="text" value="${book.bookPublisher}"></td>
+			 <th>도서 소개</th>
+			  <input type="text" value="${book.bookInfo}"></td>
+		 </tr>
+ </tbody>
+ </table>
 </body>
 
 </html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dbal.app.book.mapper.BookMapper"> <!-- mapper.java위치 알려줘야함 -->
+
+<select id="getBookNo" resultType="int">
+	select max(book_no) +1
+	FROM BOOK_TBL_06
+</select>
+
+<!-- 전체조회  -->
+<select id="getBookList" resultType="BookVO">   <!-- 담아야하는 값이 여러개여서 bookvo -->  
+	SELECT  BOOK_NO,
+			BOOK_NAME,
+			BOOK_COVERIMG,
+			BOOK_DATE,
+			BOOK_PRICE,
+			BOOK_PUBLISHER,
+			BOOK_INFO
+	FROM BOOK_TBL_06
+	ORDER BY 1
+</select>
+
+<!-- 등록 -->
+<insert id="insertBook" parameterType="BookVO">
+	INSERT INTO BOOK_TBL_06  (
+						BOOK_NO,
+						BOOK_NAME,
+						BOOK_COVERIMG,
+						BOOK_DATE,
+						BOOK_PRICE,
+						BOOK_PUBLISHER,
+						BOOK_INFO
+						)
+	
+						VALUES (
+						book_seq.NEXTVAL,
+						#{bookName},
+						#{bookCoverimg},
+						#{bookDate},
+						#{bookPrice},
+						#{bookPublisher},
+						#{bookInfo}
+						)
+</insert>
+<select id="getRent" resultType="map">
+	SELECT b.BOOK_NO "bookNo",
+			b.BOOK_NAME "bookName",
+			sum(a.rent_price)as "total",
+			count(a.rent_no) as "cnt"
+			from rent_tbl_06 a join book_tbl_06 b 
+								on b.book_no = a.book_no
+			group by b.book_no, b.book_name
+			order by 1
+</select>
+
+</mapper>

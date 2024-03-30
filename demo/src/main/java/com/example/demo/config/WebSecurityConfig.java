@@ -33,9 +33,9 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.antMatchers("/", "/home").permitAll()
-				.antMatchers("/empList").hasRole("ADMIN") //관리자만 접근 가능. 대소문자 구
-				.anyRequest().authenticated()
+				.antMatchers("/*", "/home").permitAll()
+				//.antMatchers("/empList").hasRole("ADMIN") //관리자만 접근 가능. 대소문자 구
+				//.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
 				.loginPage("/login")
